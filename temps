@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Display the temps of both broadcom chips in an Asus RT-N66U
+# Requires a custom firmware such as tomatousb running an ssh server
+#
+# Credit to the original author: darkkight93
+# http://www.linksysinfo.org/index.php?threads/asus-rt-n66u-temperature-meassure-and-graph-problems.68495/#post-230510
+
+GETTEMP1=$(wl -i eth1 phy_tempsense | awk '{ print $1}')
+GETTEMP2=$(wl -i eth2 phy_tempsense | awk '{ print $1}')
+
+if [[ $(echo "$GETTEMP1" | grep -c Not) -eq 1 ]]; then
+	echo " ==> Radio is off so cannot measure temps."
+	exit 0
+fi
+
+echo "eth1 is $(((GETTEMP1/2)+20)) C"
+echo "eth2 is $(((GETTEMP2/2)+20)) C"
